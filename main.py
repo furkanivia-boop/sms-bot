@@ -1,12 +1,18 @@
+import os
+from dotenv import load_dotenv
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ApplicationBuilder, ChatJoinRequestHandler, ContextTypes
 
-TOKEN = "8407966635:AAEvXF5ZyfKr1h7bdOi9QEMyWiyEHqOvwNs"
+# .env dosyasından TOKEN'i al
+load_dotenv()
+TOKEN = os.getenv("TOKEN")
 
+# Katılma isteği geldiğinde tetiklenen fonksiyon
 async def handle_join_request(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.chat_join_request.from_user
     user_id = user.id
 
+    # Butonlar
     keyboard = InlineKeyboardMarkup([
         [InlineKeyboardButton("📁 Grup Videolarım 👅", url="https://t.me/kanal1")],
         [InlineKeyboardButton("🎥 Ünlüyle Sızan Video 💦", url="https://t.me/kanal2")],
@@ -31,6 +37,7 @@ async def handle_join_request(update: Update, context: ContextTypes.DEFAULT_TYPE
     except Exception as e:
         print(f"Hata oluştu: {e}")
 
+# Uygulama başlat
 app = ApplicationBuilder().token(TOKEN).build()
 app.add_handler(ChatJoinRequestHandler(handle_join_request))
 app.run_polling()
